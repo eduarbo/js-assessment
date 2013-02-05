@@ -74,7 +74,9 @@ define(function() {
     },
 
     findAllOccurrences : function(arr, target) {
-
+      var index = arr.lastIndexOf(target)
+      if(index === -1) return [];
+      return this.findAllOccurrences(arr.slice(0, index), target).concat(index);
     }
   };
 });
