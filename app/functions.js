@@ -7,28 +7,28 @@ define(function() {
     },
 
     speak : function(fn, obj) {
-      return fn.call(obj)
+      return fn.call(obj);
     },
 
     functionFunction : function ( str ) {
       return function ( innerStr ) {
-        return str + ", " + innerStr;
-      }
+        return str + ', ' + innerStr;
+      };
     },
 
     makeClosures : function(arr, fn) {
       var ret = [];
       arr.forEach( function( item, i ) {
-        ret.push( function() { return fn(item) } );
-      })
+        ret.push( function() { return fn(item); } );
+      });
 
       return ret;
     },
 
     partial : function(fn, str1, str2) {
-      return function(char) {
-        return fn(str1, str2, char);
-      }
+      return function(character) {
+        return fn(str1, str2, character);
+      };
     },
 
     useArguments : function() {
@@ -52,16 +52,22 @@ define(function() {
       args.shift();
       return function() {
         return fn.apply(this, args.concat(Array.prototype.slice.call(arguments)));
-      }
+      };
     },
 
     curryIt : function(fn) {
-      var slice = Array.prototype.slice;
-      var args = slice.apply(arguments);
+        function getCurriedFn(prev) {
+            return function(arg) {
+                var args = prev.concat(arg);
+                if (args.length < fn.length) {
+                    return getCurriedFn(args);
+                } else {
+                    return fn.apply(this, args);
+                }
+            };
+        }
 
-      return function() {
-        return fn.apply(null, args.concat(slice.apply(arguments)));
-      }
+        return getCurriedFn([]);
     }
   };
 });
